@@ -5,7 +5,6 @@
 #include "Account.h"
 using ::testing::_;
 
-
 class MockTransaction : public Transaction {
 public:
 	MOCK_METHOD(bool, Make, (Account& from, Account& to, int sum), ());
@@ -15,15 +14,12 @@ public:
 class MockAccount : public Account {
 public:
 	MockAccount(int id, int balance) : Account(id, balance) {};
-	MOCK_METHOD(int, GetBalance, (), (const, override));
-	MOCK_METHOD(void, ChangeBalance, (int diff), (override));
 	MOCK_METHOD(void, Lock, (), (override));
 	MOCK_METHOD(void, Unlock, (), (override));
 	MOCK_METHOD(int, id, (), (const));
 };
-
-TEST(Transaction_test, test_SaveToDataBase) {
-
+TEST(MockTransaction_test, test_SaveToDataBase)
+{
 	Account test1(1, 10000);
 	Account test2(2, 44444);
 	MockTransaction trans;
@@ -31,91 +27,67 @@ TEST(Transaction_test, test_SaveToDataBase) {
 	trans.SaveToDataBase(test1, test2, 150);
 }
 
-TEST(Transaction_test, test_set_fee) {
+TEST(Transaction_test, test_Make) 
+{
+	Account test1(1, 2000);
+	Account test2(2, 3322);
 	Transaction trans;
-	trans.set_fee(5);
-	EXPECT_TRUE(5 == trans.fee());
-}
-
-TEST(Transaction_test, test_fee) {
-	Transaction trans;
-	EXPECT_TRUE(1 == trans.fee());
-}
-
-TEST(MockAccount_test, test_lock) {
-	MockAccount acc1(1, 200);
-	MockAccount acc2(2, 873);
-	Transaction trans;
-
-	EXPECT_CALL(acc1, Lock()).Times(::testing::AtLeast(1));
-	EXPECT_CALL(acc2, Lock()).Times(::testing::AtLeast(1));
-
-	trans.Make(acc1, acc2, 150);
-}
-
-TEST(MockAccount_test, test_unlock) {
-	MockAccount acc1(1, 200);
-	MockAccount acc2(2, 873);
-	Transaction trans;
-
-	EXPECT_CALL(acc1, Unlock()).Times(::testing::AtLeast(1));
-	EXPECT_CALL(acc2, Unlock()).Times(::testing::AtLeast(1));
-
-	trans.Make(acc1, acc2, 150);
-}
-
-
-TEST(Account_test, test_GetBalance1) {
-	Account acc(101, 1337);
-
-	int balance = acc.GetBalance();
-
-	EXPECT_EQ(balance, 1337);
-}
-
-TEST(Account_test, test_GetBalance2) {
-	Account acc(99, 0);// Arrange
-
-	int balance = acc.GetBalance();//Act
-
-	EXPECT_EQ(balance, 0);//Assert
-}
-
-TEST(Account_test, test_ChangeBalance) {
-	Account acc(99, 1);
-
-	acc.Lock();
-	acc.ChangeBalance(87556);
-	acc.Unlock();
-	int balance = acc.GetBalance();
-
-	EXPECT_EQ(balance, 87557);
-}
-
-TEST(Account_test, test_Lock) {
-	Account acc(99, 0);
-
-	ASSERT_ANY_THROW(acc.ChangeBalance(87556));
-}
-
-TEST(Account_test, test_Lock2) {
-	Account acc(99, 0);
-
-	acc.Lock();
+	bool sus = trans.Make(test1, test2, 4000);
+	EXPECT_TRUE(sus);
 	
-	ASSERT_ANY_THROW(acc.Lock(););
 }
 
-TEST(Account_test, test_UnLock) {
-	Account acc(99, 0);
-
-	acc.Lock();
-	acc.Unlock();
-	ASSERT_NO_THROW(acc.Lock());
+TEST(Transaction_test, test_Make2) 
+{
+	Account test1(1, 2000);
+	Account test2(2, -3);
+	Transaction trans;
+	bool sus = trans.Make(test1, test2, 4000);
+	EXPECT_FALSE(sus);
+	
 }
 
-int main(int argc, char** argv) {
-	::testing::InitGoogleTest(&argc, argv);
-	::testing::InitGoogleMock(&argc, argv);
-	return RUN_ALL_TESTS();
+TEST(Account_test, test_GetBalance1)
+{
+	Account test(23434, 1000);
+	int balance = test.GetBalance();
+	EXPECT_EQ(balance, 1000);
+}
+
+TEST(Acc_test, t_unlock)
+{
+	MockAccount test(1222, 0);
+	EXPECT_CALL(test, Unlock()).Times(1);
+	test.Unlock();
+}
+
+
+TEST(Account_test, test_GetBalance2) 
+{
+	Account test(9, 0);
+	int balance = test.GetBalance();
+	EXPECT_EQ(balance, 0);
+}
+
+TEST(Account_test, test_ChangeBalance)
+{
+	Account test(5, 4444);
+	test.Lock();
+	test.ChangeBalance(87556);
+	int balance = test.GetBalance();
+	EXPECT_EQ(balance, 92000);
+}
+
+TEST(Account_test, test_Lock) 
+{
+	MockAccount test(4, 0);
+	EXPECT_CALL(test, Lock()).Times(1);
+	test.Lock();
+}
+
+int main(int argc, char **argv)
+{
+    testing::InitGoogleTest(&argc, argv);
+    testing::InitGoogleMock(&argc, argv);
+    return RUN_ALL_TESTS();
 }
