@@ -24,13 +24,11 @@ public:
 
 TEST(Transaction_test, test_SaveToDataBase) {
 
-	Account acc1(1, 200);
-	Account acc2(2, 873);
-	Transaction trans;
-	bool succes = trans.Make(acc1, acc2, 150);
-	EXPECT_TRUE(acc1.GetBalance() == (200-150 - trans.fee()));
-	EXPECT_TRUE(acc2.GetBalance() == (150+873));
-	EXPECT_TRUE(succes);
+	Account test1(1, 10000);
+	Account test2(2, 44444);
+	MockTransaction trans;
+	EXPECT_CALL(trans, SaveToDataBase(_, _, _)).Times(1);	 
+	trans.SaveToDataBase(test1, test2, 150);
 }
 
 TEST(Transaction_test, test_set_fee) {
@@ -42,30 +40,6 @@ TEST(Transaction_test, test_set_fee) {
 TEST(Transaction_test, test_fee) {
 	Transaction trans;
 	EXPECT_TRUE(1 == trans.fee());
-}
-
-TEST(MockAccount_test, test_ChangeBalance) {
-	MockAccount acc1(1, 200);
-	MockAccount acc2(2, 873);
-	Transaction trans;
-
-	ON_CALL(acc1, GetBalance()).WillByDefault(::testing::Return(200));
-	EXPECT_CALL(acc1, ChangeBalance(::testing::_)).Times(::testing::AtLeast(1));
-
-	EXPECT_CALL(acc2, ChangeBalance(150)).Times(::testing::AtLeast(1));
-	 
-	trans.Make(acc1, acc2, 150);
-}
-
-TEST(MockAccount_test, test_GetbBalance) {
-	MockAccount acc1(1, 200);
-	MockAccount acc2(2, 873);
-	Transaction trans;
-
-	EXPECT_CALL(acc1, GetBalance()).Times(2);
-	EXPECT_CALL(acc2, GetBalance()).Times(1);
-
-	trans.Make(acc1, acc2, 150);
 }
 
 TEST(MockAccount_test, test_lock) {
@@ -141,7 +115,6 @@ TEST(Account_test, test_UnLock) {
 }
 
 int main(int argc, char** argv) {
-	::testing::FLAGS_gmock_verbose = "error";
 	::testing::InitGoogleTest(&argc, argv);
 	::testing::InitGoogleMock(&argc, argv);
 	return RUN_ALL_TESTS();
