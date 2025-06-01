@@ -156,7 +156,7 @@ $ gist REPORT.md
 - [Catch](https://github.com/catchorg/Catch2)
 
 
-[![Coverage Status](https://coveralls.io/repos/github/Beedy1122/lab05/badge.svg?branch=main)](https://coveralls.io/github/Beedy1122/lab05?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/Beedy1122/lab05/badge.svg?branch=master)](https://coveralls.io/github/Beedy1122/lab05?branch=master)
 ```
 Copyright (c) 2015-2021 The ISC Authors
 ```
