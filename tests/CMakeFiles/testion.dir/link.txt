@@ -1,1 +1,0 @@
-/usr/bin/c++ --coverage CMakeFiles/testion.dir/test1.cpp.o -o testion  ../banking/libbanking.a ../third-party/gtest/googlemock/gtest/libgtest.a ../third-party/gtest/googlemock/libgmock.a ../third-party/gtest/googlemock/gtest/libgtest.a 
