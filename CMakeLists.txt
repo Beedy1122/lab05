@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options(--coverage)
 add_link_options(--coverage)
 project(task)
-add_subdirectory(third-party/googletest)
+add_subdirectory(third-party/gtest)
 add_subdirectory(banking)
 add_subdirectory(test)
 
