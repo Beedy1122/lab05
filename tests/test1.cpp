@@ -7,14 +7,8 @@ using ::testing::_;
 
 
 class MockTransaction : public Transaction {
-	class MockTransaction {
 public:
-	MockTransaction() : Transaction() {};
 	MOCK_METHOD(bool, Make, (Account& from, Account& to, int sum), ());
-	MOCK_METHOD(void, Credit, (Account& accout, int sum), ());
-	MOCK_METHOD(bool, Debit, (Account& accout, int sum), ());
-	MOCK_METHOD(int, fee, (), (const));
-	MOCK_METHOD(void, set_fee, (int fee));
 	MOCK_METHOD(void, SaveToDataBase, (Account& from, Account& to, int sum), (override));
 };
 
